@@ -1,0 +1,42 @@
+﻿body {
+    background-image: url('/Images/banner2.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+}
+.seans {
+    border: 1px solid transparent;
+    padding-right: 5px;
+    background-color: yellow;
+    color: black;
+    font-weight: bold;
+    margin-top: 15px;
+}
+.tarihler {
+    color: white;
+    padding-left: 10px;
+    background-color: #f8f9fabf;
+    margin-bottom: 10px;
+}
+.tarihler a{
+    color:black;
+    font-size:15px;
+    font-weight:700;
+    padding:10px;
+}
+    .tarihler a:hover {
+        color: red;
+    }
+    .tarihler a:active {
+        color: red;
+    }
+.movie-card {
+    background-color: #f8f9fabf
+}
+.card-text{
+    font-weight:600;
+    font-size:17px;
+}
+.duration {
+    font-weight: 600;
+    font-size: 17px;
+}

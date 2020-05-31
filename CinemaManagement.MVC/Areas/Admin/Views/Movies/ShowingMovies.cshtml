@@ -1,0 +1,50 @@
+﻿@model IEnumerable<CinemaManagement.MVC.Models.Show>
+
+@{
+    ViewBag.Title = "Showing Movies";
+}
+<a href="@Url.Action("Create")" class="btn btn-primary mb-2">New Movie</a>
+<div class="card">
+    <!-- /.card-header -->
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped" data-table="true">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Titlle</th>
+                    <th>Duration</th>
+                    <th>Published</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var movie in Model)
+                {
+                    <tr>
+                        <td>@movie.Id</td>
+                        <td>@movie.Movie.Title</td>
+                        <td>@movie.Movie.Duration min</td>
+
+                        @if (movie.Movie.PublishedDate != null)
+                        {
+                            <td>
+                                @movie.Movie.PublishedDate.Value.ToString("dd/MM/yyyy")
+                            </td>
+                        }
+                        else
+                        {
+                            <td>none</td>
+                        }
+                        <td>
+                            <a href="@Url.Action("Edit",new {id=movie.Id })" class="btn btn-info"><i class="fas fa-edit"></i></a>
+                            <a href="#" class="btn btn-danger" data-delete-id="@movie.Id" data-delete-name="@movie.Movie.Title" data-delete-action="@Url.Action("delete")"><i class="fas fa-trash"></i></a>
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+    <!-- /.card-body -->
+</div>

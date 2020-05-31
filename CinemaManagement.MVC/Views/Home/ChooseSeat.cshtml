@@ -1,0 +1,142 @@
+﻿@model ShowingSeatsViewModel
+@{
+    ViewBag.Title = "ChooseSeat";
+}
+
+    <div class="row hallAll">
+
+        <div class="col-md-9">
+            <div class="screen ">
+                SCREEN
+            </div>
+            <div class="hallSeats ">
+
+                @foreach (var item in Model.Seats.OrderBy(x => x.Row))
+                {
+                    if (Model.SeatReserveds.Any(x => x.SeatId == item.Id))
+                    {
+                        <button class="btnSold" data-sold="true">@item.Row@item.Number</button>
+                    }
+                    else
+                    {
+                        <button class="btnSec" id="btnSeat" data-seat-id="@item.Id">@item.Row@item.Number</button>
+                    }
+
+                    if (Model.Seats.Where(x => x.Row == item.Row).Count() == item.Number)
+                    {
+                        <div style="padding-top:10px;"></div>
+                    }
+
+                }
+            </div>
+        </div>
+        <div class="col-md-3 rightSide">
+
+            <h6>Salon No:<span>@Model.Show.Hall.Name</span></h6>
+            <h6>Film İsmi:<span>@Model.Show.Movie.Title</span></h6>
+            <h6>Tarih: <span>@Model.Show.StartTime.ToString("dd MMMM yyyy")</span></h6>
+            <h6>Seans: <span>@Model.Show.StartTime.ToString("HH:mm")</span></h6>
+            <h6>Toplam Bilet Fiyatı: <span id="priceCal">0</span><span>₺</span></h6>
+            <h6 class="select">Seçili Koltuklar: <span id="Selected"></span></h6>
+            <a href="#" class="btn btn-danger mt-3 mr-auto" id="btnSatinAl" data-toggle="modal" data-target="#success_tic"> Ödeme Yap</a>
+            <a href="@Url.Action("Index")" class="btn btn-primary mt-3 mr-auto"> Ana Sayfaya Dön</a>
+            <div class="pt-5">
+                <div class="seatOrnek">
+                    <button type="reset" class="btnSec2"></button>
+                    <span>Boş</span>
+                </div>
+                <div class="seatOrnek">
+                    <button type="reset" class="btnSec3"></button>
+                    <span>Dolu</span>
+                </div>
+                <div class="seatOrnek">
+                    <button type="reset" class="btnSec4"></button>
+                    <span>Seçili</span>
+                </div>
+
+            </div>
+
+        </div>
+        @Html.Partial("_PaymentPartial")
+    </div>
+
+@section scripts{
+    <script>
+        var degerler;
+        $('.btnSec').click(function (e) {
+            e.preventDefault()
+            var seat = $(this);
+            if (seat.attr("data-checked")) {
+                $(this).removeAttr("style");
+                $(this).removeAttr("data-checked");
+                var row = $(this).text();
+                var previous = $("#Selected").text();
+                var txtxt = previous.replace(row, ' ');
+                $('#Selected').text(txtxt)
+                priceCalc()
+
+            }
+            else {
+                $(this).css("background-color", "green");
+                $(this).attr("data-checked", "true");
+                var row = $(this).text();
+                var previous = $("#Selected").text();
+                previous = previous + " " + row
+                $("#Selected").text(previous)
+                priceCalc()
+            }
+
+        });
+        function priceCalc() {
+            var price = "@Model.Show.Price";
+            price = price.replace(',', '.');
+            var count = $('button[data-checked=true]').length;
+            if (count > 0) {
+               var sumPrice= price * count;
+                $("#priceCal").text(sumPrice);
+            }
+            else {
+                $("#priceCal").text(0);
+            }
+        }
+        $('#btnSatinAl').click(function () {
+            var btn = $('button[data-checked=true]');
+            for (var i = 0; i < btn.length; i++) {
+                runAjax(i)
+            }
+
+        });
+        function runAjax(i) {
+             var btn = $('button[data-checked="true"]');
+             var seatId = $(btn[i]).data("seat-id");
+             var showId =@Model.Show.Id;
+                $.ajax({
+                    url: "@Url.Action("TicketBuy","Home")",
+                    type: "Post",
+                    data: { showId: showId, seatId: seatId },
+                    success: function (data) {
+                         $('#success_tic').modal('show');
+                    }
+                })
+        }
+         $('#success_tic').on('hidden.bs.modal', function () {
+                window.location.reload();
+            })
+
+
+
+         function getPayment(i) {
+             var btn = $('button[data-checked="true"]');
+             var seatId = btn.data("seat-id");
+             var showId =@Model.Show.Id;
+                $.ajax({
+                    url: "@Url.Action("Payment","Home")",
+                    type: "Get",
+                    data: { showId: showId, seatId: seatId },
+                    success: function (data) {
+                        alert(data.ShowId,data.SeatId)
+                    }
+                })
+        }
+    </script>
+}

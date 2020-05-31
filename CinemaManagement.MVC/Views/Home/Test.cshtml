@@ -1,0 +1,107 @@
+﻿@model HomeIndexViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Test</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/test.css" rel="stylesheet" />
+</head>
+<body>
+
+    <div class="row mt-3">
+        <div class="col-md-3">
+
+        </div>
+        <div class="col-md-8 col-sm-12 col-12 ml-1">
+            <div class="tarihler" style="max-width:600px;">
+                @for (DateTime i = DateTime.Now; i <= DateTime.Now.AddDays(5); i = i.AddDays(1))
+                {
+                    <a href="@Url.Action("Index","Home",new {date=i.Date })" class="btnDate" data-item-val="@i.Date"> @i.ToString("dd/MM/yyyy")</a>
+                }
+            </div>
+            <div class="card mb-3 movie-card" style="max-width: 600px;">
+                <div class="row no-gutters">
+                    <div class="col-md-4">
+                        <img src="https://www.arthipo.com/image/cache/catalog/genel-tasarim/all-posters/sinema-cinema-film-postersleri/yabanci-filmler/PSTER089-film-harry-potter-half-blood-2.jpg-1000x1000.jpg" class="card-img p-2" alt="...">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h4 class="card-title">Harry Potter ve Ateş Kadehi</h4>
+                            <p class="card-text">
+                                This is a wider card with supporting text below as a natural lead-in to additional content. fgsdg asdf sdf sd  .
+                                <div>
+                                    <a href="#" class="seans">
+                                        15:00
+                                    </a>
+                                    <a href="#" class="seans">
+                                        18:00
+                                    </a>
+                                    <a href="#" class="seans">
+                                        21:00
+                                    </a>
+                                    <a href="#" class="seans">
+                                        00:00
+                                    </a>
+                                    <a href="#" class="seans">
+                                        00:00
+                                    </a>
+                                    <a href="#" class="seans">
+                                        00:00
+                                    </a>
+                                    <a href="#" class="seans">00:00</a>
+                                </div>
+
+
+                            </p>
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @foreach (var movie in Model.Movies)
+            {
+                <div class="card mb-3 movie-card" style="max-width: 600px;">
+                    <div class="row no-gutters">
+                        <div class="col-md-4">
+                            <img src="https://www.arthipo.com/image/cache/catalog/genel-tasarim/all-posters/sinema-cinema-film-postersleri/yabanci-filmler/PSTER089-film-harry-potter-half-blood-2.jpg-1000x1000.jpg" class="card-img p-2" alt="...">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h4 class="card-title">@movie.Title</h4>
+                                <p class="card-text">
+                                   @movie.Description
+                                    <div>
+                                        @foreach (var show in Model.Shows.Where(x => x.MovieId == movie.Id).OrderBy(x => x.StartTime))
+                                        {
+                                            <a href="@Url.Action("KoltukSec","Home",new { showId=show.Id})" class="seans" >@show.StartTime.ToString("HH:mm")</a>
+                                        }
+                                    </div>
+
+
+                                </p>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            }
+        </div>
+        <div class="col-md-2 ">
+
+        </div>
+    </div>
+    <script src="~/Scripts/jquery-3.5.1.min.js"></script>
+
+</body>
+</html>

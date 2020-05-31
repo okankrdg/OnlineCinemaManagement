@@ -1,0 +1,44 @@
+﻿@model IEnumerable<CinemaManagement.MVC.Models.Show>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="card">
+    <!-- /.card-header -->
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped" data-table="true"
+               data-table-sort-order="desc" data-table-sort-column="0">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Hall</th>
+                    <th>Movie</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var show in Model)
+                {
+                    <tr>
+                        <td>@show.Id</td>
+                        <td>@show.Hall.Name</td>
+                        <td>@show.Movie.Title</td>
+                        <td>@show.StartTime</td>
+                        <td>@show.EndTime</td>
+                        <td>
+                            <a href="@Url.Action("Edit",new {id=show.Id })" class="btn btn-info"><i class="fas fa-edit"></i></a>
+                            <a href="#" class="btn btn-danger" data-delete-id="@show.Id" data-delete-name="#@show.Id" data-delete-action="@Url.Action("delete")"><i class="fas fa-trash"></i></a>
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+    <!-- /.card-body -->
+</div>
+@Html.Partial("_DeleteModal")

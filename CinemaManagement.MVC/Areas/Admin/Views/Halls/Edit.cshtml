@@ -1,0 +1,117 @@
+﻿@model CinemaManagement.MVC.Models.Hall
+
+@{
+    ViewBag.Title = Model.Name + " Edit";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+  
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.Id)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="row">
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-6">
+                <input type="submit" class="btn btn-primary" value="EDIT" />
+            </div>
+        </div>
+
+       
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-5">
+                <label>New Row:</label>
+                @Html.DropDownList("Row", null, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-5">
+                <label>Seat Count:</label>
+                @Html.TextBox("RowCount", null, new { @class = "form-control",type="Number", step=1, Value=1,min=1 })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-2">
+                <input type="button" id="btnSeatAdd" class="btn btn-primary form-control" style="margin-top:31px" value="Add" data-hall-id="@Model.Id"/>
+            </div>
+        </div>
+       
+       
+    </div>
+    <h3>Seat Order:</h3>
+    <div class="" id="hall" style=" padding:20px 75px 20px 75px; border:2px solid black">
+
+        @foreach (var item in Model.Seats.OrderBy(x=>x.Row))
+        {
+            <input type="button" data-seat-id="@item.Id" class="btnSeat" value="@item.Row@item.Number"  style="width:40px"/>
+
+            if (Model.Seats.Where(x => x.Row == item.Row).Count() == item.Number)
+            {
+
+                <a href="#" data-seat-id="@item.Id" class="SeatAdd"><i class="fas fa-plus-circle" style="color:green"></i></a>
+                <a href="#" class="SeatRemove" data-seat-id="@item.Id">
+                    <i class="fas fa-minus-circle"></i>
+                </a>
+                <div style="padding-top:10px;"></div>
+            }
+        }
+    </div>
+</div>
+}
+
+
+@section scripts{
+    <script>
+        $(function () {
+            $('#btnSeatAdd').click(function () {
+                 var hallId = $(this).data("hall-id");
+                    var RowCount = $("#RowCount").val();
+                var Row = $("#Row").val();
+                if (confirm(Row + " harfli satıra" + RowCount + " koltuk eklenecetir Onaylıyor musunuz?")) {
+                    $.ajax({
+                        url: "@Url.Action("SeatsAdd")",
+                        data: { hallId: hallId, RowCount: RowCount, Row: Row },
+                        type: "POST",
+                        success: function () {
+                            location.reload(true);
+                        }
+                    })
+                }
+                else {
+                    console.log("Cancel")
+                }
+            })
+            $('.SeatRemove').click(function (e) {
+                var id = $(this).data("seat-id");
+                $.ajax({
+                    url: "@Url.Action("SeatRemove")",
+                    data: { id: id },
+                    type:"Post",
+                    success: function (data) {
+                        location.reload(true);
+                    }
+                })
+            })
+            $('.SeatAdd').click(function (e) {
+                var id = $(this).data("seat-id");
+                $.ajax({
+                    url: "@Url.Action("SeatCreate")",
+                    data: { id: id },
+                    type: "POST",
+                    success: function (data) {
+                        location.reload(true);
+                    }
+                })
+            })
+        })
+    </script>
+
+}

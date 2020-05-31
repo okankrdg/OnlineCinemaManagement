@@ -1,0 +1,51 @@
+﻿@model CinemaManagement.MVC.Models.Seat
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Seat</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Hall.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Hall.Name)
+        </dd>
+
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Row)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Row)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Number)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Number)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsAvaliable)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsAvaliable)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,48 @@
+﻿@model IEnumerable<CinemaManagement.MVC.Models.Hall>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="alert alert-warning alert-dismissible">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <h5><i class="icon fas fa-exclamation-triangle"></i> Uyarı!</h5>
+    Sadece gösterimi olmayan salonlar silinebilir
+</div>
+<a href="@Url.Action("Create")" class="btn btn-success mb-1">New Hall</a>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Manage Halls</h3>
+    </div>
+    <!-- /.card-header -->
+
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped" data-table="true">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Hall Name (Seat Count)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var hall in Model)
+                {
+                    <tr>
+                        <td>@hall.Id</td>
+                        <td>@hall.Name (@hall.Seats.Count())</td>
+                        <td>
+                            <a href="@Url.Action("Edit",new {id=hall.Id })" class="btn btn-info"><i class="fas fa-edit"></i></a>
+                            <a href="#" class="btn btn-danger" data-delete-id="@hall.Id" data-delete-name="@hall.Name" data-delete-action="@Url.Action("delete")"><i class="fas fa-trash"></i></a>
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+    <!-- /.card-body -->
+</div>
+
+@Html.Partial("_DeleteModal")

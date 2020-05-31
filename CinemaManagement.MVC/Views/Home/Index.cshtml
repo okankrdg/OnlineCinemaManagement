@@ -1,0 +1,78 @@
+﻿@model HomeIndexViewModel
+
+<div class="row mt-3">
+    <div class="col-md-3">
+
+    </div>
+    <div class="col-md-8 col-sm-12 col-12 ml-1">
+        <div class="tarihler" style="max-width:600px;">
+            @for (DateTime i = DateTime.Now; i <= DateTime.Now.AddDays(5); i = i.AddDays(1))
+            {
+                <a href="@Url.Action("Index","Home",new {date=i.Date })" class="btnDate" data-item-val="@i.Date"> @i.ToString("dd/MM/yyyy")</a>
+            }
+        </div>
+
+        @foreach (var movie in Model.Movies)
+        {
+            <div class="card mb-3 movie-card" style="max-width: 600px;">
+                <div class="row no-gutters">
+                    <div class="col-md-4">
+                        <img src="@Url.ImagePath(movie.PosterPhotoPath)" class="card-img p-2" alt="...">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h4 class="card-title">@movie.Title</h4>
+                            <p class="card-text">
+                                @movie.Description
+                            </p>
+                            <p class="duration">Süre: <span>@movie.Duration dk</span></p>
+                            <div>
+                                @foreach (var show in Model.Shows.Where(x => x.MovieId == movie.Id).OrderBy(x => x.StartTime))
+                                {
+                                    <a href="@Url.Action("ChooseSeat","Home",new { showId=show.Id})" class="seans">@show.StartTime.ToString("HH:mm")</a>
+                                }
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+    <div class="col-md-2 ">
+
+    </div>
+</div>
+@section scripts{
+    <script>
+
+        var query = getUrlVars()["date"];
+        var sayac = 0;
+        ($(".tarihler a").each(function () {
+            var link = $(this).attr("href");
+            var selected = link.indexOf(query);
+            if (selected > -1) {
+                $(".tarihler a").css("color", "black")
+                $(this).css("color", "red")
+            }
+            if(query==null) {
+                $($(".tarihler a")[0]).css("color", "red");
+            }
+          
+        }))
+       
+        function getUrlVars() {
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+            for (var i = 0; i < hashes.length; i++) {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+            return vars;
+        }
+    </script>
+
+}

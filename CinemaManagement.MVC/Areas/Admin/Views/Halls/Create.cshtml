@@ -1,0 +1,32 @@
+﻿@model CinemaManagement.MVC.Models.Hall
+
+@{
+    ViewBag.Title = "Create Hall";
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="alert alert-warning">
+        <p> <strong>Uyarı:</strong> Koltuk eklemek için önce salonun ismini oluşturmalısınız sonra <strong>edit</strong> sayfasından koltuk ekleyip çıkarabilirsiniz.</p>
+    </div>
+<div class="form-horizontal">
+    
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+    <div class="form-group">
+       <a href="@Url.Action("Index")" class="btn btn-danger" >Cancel</a>
+        <input type="submit" value="Create and Seat Add Redirect" class="btn btn-primary" />
+    </div>
+</div>
+}
